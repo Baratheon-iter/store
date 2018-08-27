@@ -1,9 +1,10 @@
 import { combineReducers } from 'redux';
-import productsReducer from './productReducer';
-
+import userInfoReducer from './userInfoReducer.js'
+import productsReducer from './productReducer'
 
 const reducers = combineReducers({
-    products: productsReducer
-});
+  chat: userInfoReducer,
+  products: productsReducer
+})
 
 export default reducers;

@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const eventController = require('./db/eventControllers/productEventController.js');
-var server = require('http').Server(app);
+// var server = require('http').Server(app);
 const db = require('./db/postgresql.js');
 const http = require('http');
 const socket = require('socket.io');
@@ -31,16 +31,15 @@ app.get('/main',
 //     eventController.getCart,
 // )
 
-
-
-
 //==================> SOCKETS <=====================\\
-server = app.listen(PORT, console.log(`Listening on port: ${PORT} ==> this is so tight`));
+
+const server = app.listen(PORT, console.log(`Listening on port: ${PORT} ==> this is so tight`));
 
 const io = socket(server);
 
 io.on('connection', (socket) => {
-    socket.on('SEND_MESSAGE', function(data){
-        io.emit('RECEIVE_MESSAGE', data);
-    })
+  console.log("socket: ", socket.id);
+  socket.on('SEND_MESSAGE', function(data){
+    io.sockets.emit('RECEIVE_MESSAGE', data);
+  })
 });
