@@ -1,19 +1,21 @@
 //Dumb Component, will display a logo, cart and user profile link w/ image. 
 import React from 'react'; 
-// import styles.css from '.client/styles.css';
-
+import { withStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 const HeaderComponent = () => {
-  
-  
+
 return (
-    <div className="header"> 
-        <h1>LOGO HERE</h1> 
-        <div>LINK TO profile</div>
-        <div>LOGO FOR CART WITH LINK</div>
-    </div>
-    )
- }
+  <div>
+    <NavBar>
+
+    </NavBar>
+  </div>
+  )
+}
 
 
 
