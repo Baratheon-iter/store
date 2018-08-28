@@ -19,14 +19,22 @@ class Chat extends Component {
     super(props);
     console.log(props);
 
-    // keeping this for now because it's the only thing that updates the page :(
+    // keeping this because it's the only thing that updates the page :(
     this.state = {
       message: '',
+      dummy: false
     };
 
     const that = this;
     this.props.socket.on('RECEIVE_MESSAGE', data => {
       that.props.addMessage(data);
+
+      // I made this dummy boolean to force the page to rerender.
+      // It's probably not right but it works so there.
+      this.setState(previousState => {
+        previousState.received === !previousState.received;
+        return previousState;
+      })
     });
 
     this.sendMessage = this.sendMessage.bind(this);
