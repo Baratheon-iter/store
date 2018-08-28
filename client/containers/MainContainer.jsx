@@ -4,6 +4,7 @@ import HeaderComponent from '../components/HeaderComponent.jsx';
 import Chat from '../components/CustomerService.jsx';
 import ProductDisplay from '../components/ProductDisplayComponent.jsx';
 import * as actions from '../actions/actions.js'
+import classNames from 'classnames';
 
 const mapStateToProps = store => {
   console.log(store)
@@ -21,11 +22,10 @@ class MainContainer extends Component {
   }
 
   render() {
+    const {classes} = this.props;
     return (
-      <div>       
-        <HeaderComponent />
-        <ProductDisplay products={this.props.products}/> 
-        <Chat />
+      <div style={{marginLeft: "auto", marginRight: "auto", width: '100%'}}className={classNames(classes.layout, classes.cardGrid)}>       
+        <ProductDisplay classes={this.props.classes} products={this.props.products}/> 
       </div>
       );
   }
