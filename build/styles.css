@@ -99,11 +99,12 @@ h2 {
     bottom: 0px;
     width: inherit;
     text-align: center;
-    padding: : 5px auto;
+    padding: 5px auto;
 }
+
  .send button {
     background-color: red;
-    position: /*relative*/;
+    position: relative;
     bottom: 0px;
     width: 90%;
     text-align: center;
