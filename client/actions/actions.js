@@ -14,6 +14,11 @@ export const fetchUserInfo = () => {
   }
 }
 
+export const addCart = productID => ({
+  type: types.ADD_CART,
+  productID: productID
+})
+
 export const addMessage = message => ({
   type: types.ADD_MESSAGE,
   payload: message

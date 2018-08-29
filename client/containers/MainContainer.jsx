@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 const mapStateToProps = store => {
   return {
-  products: store.products,
+  products: store.products.stock,
 }};
 
 const dispatchStateToProps = dispatch => ({

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chat from './components/CustomerService.jsx'
+import { BrowserRouter, Route } from 'react-router-dom';
 
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,6 +17,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import MainContainer from './containers/MainContainer.jsx';
+// import { SnackbarProvider } from 'material-ui-snackbar-provider'
+// import withSnackbar from 'material-ui-snackbar-provider/lib/withSnackbar';
+
 
 const styles = theme => ({
   appBar: {
@@ -73,6 +77,7 @@ function App(props) {
 
   return (
     <div>
+      {/* <SnackbarProvider snackbarProps={{ autoHideDuration: 4000 }}> */}
       <React.Fragment>
         <CssBaseline />
         <AppBar position="static" className={classes.appBar}>
@@ -138,6 +143,7 @@ function App(props) {
         {/* End footer */}
       </React.Fragment>
       <Chat />
+      {/* </SnackbarProvider> */}
     </div>
   );
 }
