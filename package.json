@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/server.js",
-    "start-production": "NODE_ENV Production server/server.js"
+    "start-production": "NODE_ENV Production server/server.js",
     "build": "webpack -d --watch --display-error-details",
     "travis-build": "webpack -d --display-error-details"
   },

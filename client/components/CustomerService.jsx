@@ -23,12 +23,14 @@ class Chat extends Component {
     this.state = {
       message: '',
       rooms: null,
+      join: false,
       dummy: false
     };
 
     this.selectUser = this.selectUser.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.ensureSocketIsSet = this.ensureSocketIsSet.bind(this);
+    this.selectUser = this.selectUser.bind(this);
   }
 
   componentDidMount() {
@@ -107,6 +109,11 @@ class Chat extends Component {
   selectUser(e) {
     if (e.target.innerHTML === 'Socket') return;
     // join private room
+    this.setState((previousState) => {
+      previousState.join = true;
+      return previousState;
+    })
+
     that.props.socket.emit('room', e.target.id);
 
     // listen for messages
@@ -140,7 +147,7 @@ class Chat extends Component {
       )
     }
 
-    return !this.props.admin ? (
+    return !this.props.admin || this.state.join ? (
       <div style={{'position': 'fixed'}}className="chat-box">
         <div className="chat-head">
           <h2 style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}}>Customer Service Rep</h2>

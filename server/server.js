@@ -61,7 +61,7 @@ function checkIfUserExists(username, user, done) {
 
 function loggedIn(req, res, next) {
   if (req.user && sessions[req.user.displayName]) {
-    res.locals = req.user.profile.name.givenName; // helps me determine if user is admin
+    res.locals = req.user.admin; // helps me determine if user is admin
     next();
   } else {
     res.redirect('/login');
@@ -112,7 +112,8 @@ app.get('/getUserInfo', (req, res) => {
   newObj = {
     name: req.user.profile.name.givenName,
     id: req.user.profile.id,
-    admin: true
+    // admin: false
+    admin: req.user.admin
   }
   res.send(JSON.stringify(newObj));
 })
@@ -131,7 +132,7 @@ const io = socket(server);
 
 function socketSetup(req, res, next) {
   console.log(res.locals);
-  if (res.locals !== 'Hannah') userSocket();
+  if (!res.locals) userSocket();
   else adminSocket();
   next();
 }
