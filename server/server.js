@@ -11,7 +11,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require('dotenv').config()
 const session = require('express-session')
-let userId; // will be set in loggedIn function
+let rooms;  // important
 
 const PORT = process.env.PORT || 3000;
 
@@ -52,8 +52,8 @@ function checkIfUserExists(username, user, done) {
 }
 
 function loggedIn(req, res, next) {
-  if(req.user && sessions[req.user.displayName]) {
-    userId = req.user.profile.id; // this allows me to create a socket with a unique id
+  if (req.user && sessions[req.user.displayName]) {
+    res.locals = req.user.profile.name.givenName; // helps me determine if user is admin
     next();
   } else {
     res.redirect('/login');
@@ -70,12 +70,7 @@ passport.use(new GoogleStrategy({
 }));
 
 passport.serializeUser(function(user, done) {
-
-    checkIfUserExists(user.displayName, user, done);
-
-    //console.log(user)
-
-    //done(null, user);
+  checkIfUserExists(user.displayName, user, done);
 });
 
 passport.deserializeUser(function(user, done) {
@@ -84,18 +79,16 @@ passport.deserializeUser(function(user, done) {
 
 //============> PRODUCT ROUTES <===============\\
 
-app.get('/', loggedIn, (req, res) => {
+app.get('/', loggedIn, socketSetup, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../build/index.html'));
 })
 app.get('/login', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../build/index.html'));
 })
-app.get('/cart', loggedIn, (req, res) => {
+app.get('/cart', loggedIn, socketSetup, (req, res) => {
   res.sendFile(path.resolve(__dirname, '../build/index.html'));
 })
-app.get('/main', loggedIn,
-  itemController.getAllItems
-)
+app.get('/main', loggedIn, socketSetup, itemController.getAllItems)
 
 //==========> OTHER ROUTES <===========\\
 
@@ -107,9 +100,14 @@ app.get('/googleOAuth', passport.authenticate('google', {failureRedirect: '/logi
 app.get('/getUserInfo', (req, res) => {
   newObj = {
     name: req.user.profile.name.givenName,
-    id: req.user.profile.id
+    id: req.user.profile.id,
+    admin: true
   }
   res.send(JSON.stringify(newObj));
+})
+
+app.get('/getRooms', (req, res) => {
+  res.send(JSON.stringify(rooms));
 })
 
 app.use(express.static(path.join(__dirname, '../build')));
@@ -120,19 +118,16 @@ const server = app.listen(PORT, console.log(`Listening on port: ${PORT} ==> this
 
 const io = socket(server);
 
-// returns a promise that checked if the user id was set yet
-function checkForUserId() {
-  return new Promise((resolve, reject) => {
-    (function checkId() {
-      if (userId) return resolve();
-      setTimeout(checkId, 30);
-    })();
-  })
+function socketSetup(req, res, next) {
+  console.log(res.locals);
+  if (res.locals !== 'Hannah') userSocket();
+  else adminSocket();
+  next();
 }
 
-// once id is set we can make a socket room with that user's unique id
-checkForUserId()
-.then(() => {
+let sendFirstMessage = false;
+
+function userSocket() {
   io.on('connection', (socket) => {
     console.log("connect to socket: ", socket.id);
 
@@ -142,15 +137,27 @@ checkForUserId()
       room = rm;
       socket.join(rm);
 
-      io.in(room).emit('RECEIVE_MESSAGE', {
-        author: 'Admin',
-        message: 'How can I help you?',
-        admin: true
-      });
+      if (!sendFirstMessage) {
+        io.in(room).emit('RECEIVE_MESSAGE', {
+          author: 'Admin',
+          message: 'How can I help you?',
+          admin: true
+        });
+        sendFirstMessage = true;
+      }
+      // console.log(io.sockets.adapter.rooms);
     });
 
     socket.on('SEND_MESSAGE', function(data){
       io.in(room).emit('RECEIVE_MESSAGE', data);
     })
   });
-});
+}
+
+function adminSocket() {
+  io.on('connection', (socket) => {
+    console.log("connect to socket: ", socket.id);
+    console.log(io.sockets.adapter.rooms);
+  });
+  rooms = io.sockets.adapter.rooms;
+}

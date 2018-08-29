@@ -8,7 +8,7 @@ export const fetchUserInfo = () => {
           .then(function(text) {
             const userObj = JSON.parse(text);
             dispatch(initializeSocketRoom(`${userObj.id}`));
-            dispatch(updateUserName(userObj.name));
+            dispatch(updateUserName(userObj));
         });
       })
   }

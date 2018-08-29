@@ -5,7 +5,8 @@ const initialState = {
   username: 'default',
   messages: [],
   socket: io('localhost:3000'),
-  room: null
+  room: null,
+  admin: false
 }
 
 const userInfoReducer = (state=initialState, action) => {
@@ -20,7 +21,7 @@ const userInfoReducer = (state=initialState, action) => {
       return Object.assign(state, { messages } )
 
     case types.UPDATE_USERNAME:
-      return Object.assign(state, { username: action.payload } )
+      return Object.assign(state, { username: action.payload.name, admin: action.payload.admin } )
 
     default:
       return state;
