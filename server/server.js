@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000;
 let callbackURL = "http://localhost:3000/googleOAuth";
 
 if(process.env.NODE_ENV === "Production") {
-  callbackURL = "http://54.161.32.236/googleOAuth";
+  callbackURL = "http://ec2-54-161-32-236.compute-1.amazonaws.com/googleOAuth";
 }
 
 let sessions = {secret: 'TESTING', name: 'login', proxy: true, resave: true, saveUninitialized: false};
