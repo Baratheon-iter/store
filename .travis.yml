@@ -12,6 +12,7 @@ script:
   - cp appspec.yml toZip/appspec.yml
   - cp -r build toZip/build
   - cp -r server toZip/server
+  - cp package.json toZip/package.json
   - cd toZip
   - zip -r ../build.zip *
   - cd ..
