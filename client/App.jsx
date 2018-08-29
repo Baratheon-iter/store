@@ -85,7 +85,7 @@ function App(props) {
             <Typography variant="title" color="inherit" nowrap='true'>
               ESTORE FOR THINGS THAT ARE Toight
             </Typography>
-            <div onClick={() => window.location.href="http://localhost:3000/cart"} style = {{position: 'absolute', right: '10%'}}>
+            <div onClick={() => window.location.href= window.location.href.split('/')[0] + "/cart"} style = {{position: 'absolute', right: '10%'}}>
               <Button variant="raised" color="secondary" nowrap='true' >
                 Cart
               </Button>
@@ -109,7 +109,7 @@ function App(props) {
               <div className={classes.heroButtons}>
                 <Grid container spacing={16} justify="center">
                   <Grid item>
-                  <div onClick={() => window.location.href="http://localhost:3000/cart"}>
+                  <div onClick={() => window.location.href= window.location.href.split('/')[0] + "/cart"}>
                     <Button variant="contained" color="primary">
                       Checkout
                     </Button>

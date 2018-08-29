@@ -14,6 +14,11 @@ const session = require('express-session')
 let rooms;  // important
 
 const PORT = process.env.PORT || 3000;
+let callbackURL = "http://localhost:3000/googleOAuth";
+
+if(process.env.NODE_ENV === "Production") {
+  callbackURL = "http://54.161.32.236/googleOAuth";
+}
 
 let sessions = {secret: 'TESTING', name: 'login', proxy: true, resave: true, saveUninitialized: false};
 
@@ -30,6 +35,8 @@ function createUserAndCart(username, user, done) {
             db.one(`INSERT INTO "cart"("customerid") VALUES($1) RETURNING "id"`, [customerId])
                 .then(data => {
                   user.id = customerId;
+                  user.cartid = data.id;
+                  user.admin = false;
                   done(null, user);
                 })
                 .catch(error => {
@@ -44,6 +51,7 @@ function checkIfUserExists(username, user, done) {
   db.one('SELECT * FROM customer WHERE username = $1', username)
       .then(customer => {
           user.id = customer.id;
+          user.admin = customer.admin;
           done(null, user);
       })
       .catch( () => {
@@ -63,7 +71,7 @@ function loggedIn(req, res, next) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: 'http://localhost:3000/googleOAuth'
+    callbackURL: callbackURL
 }, function(accessToken, refreshToken, profile, cb) {
     sessions[profile.displayName] = profile;
     return cb(null, {displayName: profile.displayName, profile: profile});
@@ -90,9 +98,12 @@ app.get('/cart', loggedIn, socketSetup, (req, res) => {
 })
 app.get('/main', loggedIn, socketSetup, itemController.getAllItems)
 
+
 //==========> OTHER ROUTES <===========\\
 
-app.post('/api/users', customerController.createUser)
+app.post('/api/additem', itemController.findCustomerCart, itemController.checkIfItemAlreadyAddedToCart, itemController.incrementCartItemQuantity);
+app.post('/api/customers', customerController.createUser);
+
 app.get('/googleLogin', passport.authenticate('google', {scope: ['profile']}));
 app.get('/googleOAuth', passport.authenticate('google', {failureRedirect: '/login'}), function(req, res) {
     res.redirect('/');

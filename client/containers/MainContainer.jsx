@@ -30,7 +30,7 @@ class MainContainer extends Component {
   }
 
   componentDidMount () {
-    fetch('http://localhost:3000/main')
+    fetch('http://' + window.location.href.split('//')[1].split('/')[0] + '/main')
     .then((data) => data.json())
     .then((data) => {
       this.props.loadProducts(data);

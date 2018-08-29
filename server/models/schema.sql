@@ -38,3 +38,24 @@ CREATE TABLE "item" (
 ALTER TABLE "cart" ADD CONSTRAINT "cart_fk0" FOREIGN KEY ("customerid") REFERENCES "customer"("id");
 
 ALTER TABLE "item" ADD CONSTRAINT "item_fk0" FOREIGN KEY ("cartid") REFERENCES "cart"("id");
+
+
+
+
+
+
+CREATE TABLE "cartitem" (
+	"id" serial NOT NULL,
+	"cartid" integer NOT NULL,
+	"quantity" integer NOT NULL,
+	"itemid" integer NOT NULL,
+	CONSTRAINT cartitem_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+ALTER TABLE "cartitem" ADD CONSTRAINT "cartitem_fk0" FOREIGN KEY ("cartid") REFERENCES "cart"("id");
+ALTER TABLE "cartitem" ADD CONSTRAINT "cartitem_fk1" FOREIGN KEY ("itemid") REFERENCES "Item"("id");
+
+
+

@@ -4,7 +4,7 @@ import io from "socket.io-client";
 const initialState = {
   username: 'default',
   messages: [],
-  socket: io('localhost:3000'),
+  socket: io(window.location.href.split('//')[1].split('/')[0]),
   room: null,
   admin: false
 }
