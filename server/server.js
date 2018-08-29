@@ -148,7 +148,6 @@ checkForUserId()
         admin: true
       });
     });
-    //-------
 
     socket.on('SEND_MESSAGE', function(data){
       io.in(room).emit('RECEIVE_MESSAGE', data);
