@@ -169,7 +169,7 @@ function userSocket() {
 function adminSocket() {
   io.on('connection', (socket) => {
     console.log("connect to socket: ", socket.id);
-    console.log(io.sockets.adapter.rooms);
+    console.log(Object.values(io.sockets.adapter.rooms));
   });
   rooms = io.sockets.adapter.rooms;
 }

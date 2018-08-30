@@ -31,6 +31,7 @@ class Chat extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.ensureSocketIsSet = this.ensureSocketIsSet.bind(this);
     this.selectUser = this.selectUser.bind(this);
+    this.toggleChat = this.toggleChat.bind(this);
   }
 
   componentDidMount() {
@@ -89,7 +90,7 @@ class Chat extends Component {
       this.props.socket.emit('SEND_MESSAGE', {
         author: this.props.username,
         message: this.state.message,
-        admin: false
+        admin: this.props.admin
       });
       this.setState({message: ''});
     }
@@ -104,25 +105,30 @@ class Chat extends Component {
     } else {
       $(".chat-head img").attr("src", "https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png");
     }
+
+    // for admins only
+    this.setState((previousState) => {
+      previousState.join = false;
+      return previousState;
+    })
   }
 
   selectUser(e) {
-    if (e.target.innerHTML === 'Socket') return;
     // join private room
     this.setState((previousState) => {
       previousState.join = true;
       return previousState;
     })
 
-    that.props.socket.emit('room', e.target.id);
+    this.props.socket.emit('room', e.target.id);
 
     // listen for messages
-    that.props.socket.on('RECEIVE_MESSAGE', data => {
-      that.props.addMessage(data);
+    this.props.socket.on('RECEIVE_MESSAGE', data => {
+      this.props.addMessage(data);
 
       // I made this dummy boolean to force the page to rerender.
       // It's probably not right but it works so there.
-      that.setState(previousState => {
+      this.setState(previousState => {
         previousState.received === !previousState.received;
         return previousState;
       })
@@ -138,14 +144,15 @@ class Chat extends Component {
       )
     })
 
-    const rooms = [];
-    let counter = 0;
-    for (let key in this.state.rooms) {
-      counter += 1;
-      rooms.push(
-        <div style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}} key={key} id={key} onClick={this.selectUser} className='msg-send'>{counter === 1 ? 'Socket' : `User ${counter}`}</div>
+    let rooms = [];
+    for (let key in this.state.rooms) rooms.push(key);
+
+    rooms = rooms.map((room, i) => {
+      if (room === '101209756539695740689') return (<div></div>);
+      return (
+        <div style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}} key={i + room} id={room} onClick={this.selectUser} className='msg-send'>{`User ${i + 1}`}</div>
       )
-    }
+    })
 
     return !this.props.admin || this.state.join ? (
       <div style={{'position': 'fixed'}}className="chat-box">
@@ -180,10 +187,9 @@ class Chat extends Component {
             </div>
           </div>
           <div className="chat-text">
-            <input type="text" placeholder="Message" className="form-control" value={this.state.message} onKeyDown={ev => {if(ev.keyCode === 13){this.sendMessage(ev)}}} onChange={ev => this.setState({message: ev.target.value})}/>
           </div>
           <div className="send">
-            <button onClick={this.sendMessage}>SELECT</button>
+            <button>SELECT</button>
           </div>
         </div>
       </div>
