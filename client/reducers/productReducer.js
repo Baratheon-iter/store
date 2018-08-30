@@ -9,6 +9,7 @@ const products = (state=initialState, action) => {
 
     let cart;
     let stock;
+    let remainder;
     
     switch(action.type) {
         case types.LOAD_PRODUCTS:
@@ -25,10 +26,13 @@ const products = (state=initialState, action) => {
                         imagePath: product.imagePath,
                         price: product.price
                     }     
+                    remainder = productObj.quantity;
                     return productObj;
                 } else {
                     return product;
                 }
+                
+                
             });
             const cartObj = {};
             let itemExists = false;
@@ -42,6 +46,23 @@ const products = (state=initialState, action) => {
                 cart.push({id: action.productID, count: 1})
             }
             console.log('cart: ', cart);
+
+            console.log('PRODUCT ID: ', action.productID);
+            fetch('/api/additem', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: action.productID,
+                    count: remainder
+                })
+            })
+                .then((data) => console.log(data))
+                .then((data) => {
+                    console.log('success');
+                });
 
             return Object.assign(state, {stock, cart})
             

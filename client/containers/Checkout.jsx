@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm.jsx';
 import PaymentForm from './PaymentForm.jsx';
 import Review from './Review.jsx';
+import { connect } from 'react-redux';
 
 const styles = theme => ({
   appBar: {
@@ -53,14 +54,31 @@ const styles = theme => ({
 
 const steps = ['Review your order', 'Shipping address', 'Payment details'];
 
+const mapStateToProps = store => ({
+  // provide pertinent state here
+  cart: store.products.cart,
+  stock: store.products.stock
+});
+
 function getStepContent(step) {
+  // console.log('cart is ', cart);
+  // console.log('stock is: ', stock);
   switch (step) {
     case 1:
       return <AddressForm />;
     case 2:
       return <PaymentForm />;
     case 0:
-      return <Review />;
+      // fetch('/api/getitem')
+      // .then(resp => resp.json())
+      // .then(data => {
+
+        
+
+      //   return <Review cart={cart} stock={stock}/>;
+      // })
+      return <Review/>
+      // return <Review cart={this.props.cart} stock={this.props.stock}/>;
     default:
       throw new Error('Unknown step');
   }
@@ -94,7 +112,6 @@ class Checkout extends React.Component {
   render() {
     const { classes } = this.props;
     const { activeStep } = this.state;
-
     return (
       <React.Fragment>
         <CssBaseline />
@@ -137,6 +154,7 @@ class Checkout extends React.Component {
                 </React.Fragment>
               ) : (
                 <React.Fragment>
+                  {console.log('beforestep function: ',this.props.cart)}
                   {getStepContent(activeStep)}
                   <div className={classes.buttons}>
                     {activeStep !== 0 && (
@@ -167,4 +185,6 @@ Checkout.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Checkout);
+// export default withStyles(styles)(Checkout);
+export default connect(mapStateToProps)(withStyles(styles)(Checkout));
+// export connect(mapStateToProps)(Checkout);

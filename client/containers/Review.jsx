@@ -6,6 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
 
 const products = [
   { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
@@ -14,6 +15,7 @@ const products = [
   { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
   { name: 'Shipping', desc: '', price: 'Free' },
 ];
+
 const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 const payments = [
   { name: 'Card type', detail: 'Visa' },
@@ -63,4 +65,6 @@ Review.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+// export default (withStyles(styles), connect(mapStateToProps))(Review);
 export default withStyles(styles)(Review);
+// export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Review));

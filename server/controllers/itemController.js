@@ -23,7 +23,7 @@ function filterByWomen(req, res, next) {
 
 function findCustomerCart(req, res, next) {
     const customerId = req.user.id;
-
+    console.log('item id: ', req.body.id);
     //console.log(req)
     db.any('SELECT id FROM cart where customerid = $1', [customerId])
         .then(function(data) {
@@ -81,7 +81,8 @@ function decrementStockItemQuantity(req, res, next) {
 
     db.none('UPDATE "Item" SET quantity = $1 WHERE id = $2', [count - 1, itemId])
         .then( () => {
-            req.json("SUCCESSSSS");
+            // req.json("SUCCESSSSS");
+            console.log('Success');
         })
         .catch(error => {
             console.log('ERROR DECREMENTING ITEM QUANTITY FROM STOCK:', error);

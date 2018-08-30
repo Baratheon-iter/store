@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chat from './components/CustomerService.jsx'
-import { BrowserRouter, Route } from 'react-router-dom';
+// import { BrowserRouter, Route } from 'react-router-dom';
 
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,8 +17,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import MainContainer from './containers/MainContainer.jsx';
-// import { SnackbarProvider } from 'material-ui-snackbar-provider'
-// import withSnackbar from 'material-ui-snackbar-provider/lib/withSnackbar';
+
+import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+
+
 
 
 const styles = theme => ({
