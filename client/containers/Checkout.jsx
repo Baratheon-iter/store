@@ -147,7 +147,7 @@ class Checkout extends React.Component {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => window.location.href= window.location.href.split('/')[0] + ":3000"}
+                    onClick={() => window.location.href= window.location.href.split('/')[0] + "/"}
                     className={classes.button}
                   > Toight
                   </Button>
