@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/server.js",
-    "start-production": "NODE_ENV Production server/server.js",
+    "start-production": "NODE_ENV=Production server/server.js",
     "build": "webpack -d --watch --display-error-details",
     "travis-build": "webpack -d --display-error-details"
   },
@@ -55,6 +55,7 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "react-router-redux": "^4.0.8",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "socket.io": "^2.1.1",

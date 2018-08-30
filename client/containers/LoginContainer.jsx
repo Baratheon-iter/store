@@ -57,7 +57,7 @@ function SignIn(props) {
           <Typography variant="headline">Sign in</Typography>
           <form className={classes.form}>
             <Button
-              onClick={() => {window.location.href = 'http://localhost:3000/googleLogin'}}
+              onClick={() => {window.location.href = window.location.href.split('/')[0] + 'googleLogin'}}
               fullWidth
               variant="raised"
               color="primary"

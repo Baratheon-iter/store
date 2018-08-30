@@ -8,7 +8,7 @@ node_js:
   - '6.0.0'
 script:
   - npm run travis-build
-  - mkdir toZip
+  - mkdir -p toZip
   - cp appspec.yml toZip/appspec.yml
   - cp -r build toZip/build
   - cp -r server toZip/server

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Chat from './components/CustomerService.jsx'
-import { BrowserRouter, Route } from 'react-router-dom';
+// import { BrowserRouter, Route } from 'react-router-dom';
 
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -17,8 +17,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import MainContainer from './containers/MainContainer.jsx';
-// import { SnackbarProvider } from 'material-ui-snackbar-provider'
-// import withSnackbar from 'material-ui-snackbar-provider/lib/withSnackbar';
+
+import { Router, Route, browserHistory } from 'react-router';
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+
+
 
 
 const styles = theme => ({
@@ -90,9 +93,11 @@ function App(props) {
                 Cart
               </Button>
             </div>
-            <Button variant="raised" color="secondary" nowrap='true' style = {{position: 'absolute', right: '2%'}}>
-              Logout
-            </Button>
+            <div onClick={() => window.location.href= window.location.href.split('/')[0] + "/logout"} style = {{position: 'absolute', right: '2%'}}>
+              <Button variant="raised" color="secondary" nowrap='true'>
+                Logout
+              </Button>
+            </div>
           </Toolbar>
         </AppBar>
         <main>
@@ -115,10 +120,12 @@ function App(props) {
                     </Button>
                   </div>
                   </Grid>
-                  <Grid item>
-                    <Button variant="outlined" color="primary">
-                      Be lame
-                    </Button>
+                    <Grid item>
+                    <div onClick={() => {window.location.href = "https://amazon.com"}}>
+                      <Button variant="outlined" color="primary">
+                        Be lame
+                      </Button>
+                    </div>
                   </Grid>
                 </Grid>
               </div>
