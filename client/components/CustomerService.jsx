@@ -7,7 +7,8 @@ const mapStateToProps = store => ({
   username: store.chat.username,
   messages: store.chat.messages,
   socket: store.chat.socket,
-  room: store.chat.room
+  room: store.chat.room,
+  admin: store.chat.admin
 });
 
 const dispatchStateToProps = dispatch => ({
@@ -21,11 +22,16 @@ class Chat extends Component {
 
     this.state = {
       message: '',
+      rooms: null,
+      join: false,
       dummy: false
     };
 
+    this.selectUser = this.selectUser.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.ensureSocketIsSet = this.ensureSocketIsSet.bind(this);
+    this.selectUser = this.selectUser.bind(this);
+    this.toggleChat = this.toggleChat.bind(this);
   }
 
   componentDidMount() {
@@ -38,20 +44,34 @@ class Chat extends Component {
     const that = this;
     this.ensureSocketIsSet(that)
     .then(() => {
-      // join private room
-      that.props.socket.emit('room', that.props.room);
+      if (!that.props.admin) {  // not an admin
+        // join private room
+        that.props.socket.emit('room', that.props.room);
 
-      // listen for messages
-      that.props.socket.on('RECEIVE_MESSAGE', data => {
-        that.props.addMessage(data);
+        // listen for messages
+        that.props.socket.on('RECEIVE_MESSAGE', data => {
+          that.props.addMessage(data);
 
-        // I made this dummy boolean to force the page to rerender.
-        // It's probably not right but it works so there.
-        that.setState(previousState => {
-          previousState.received === !previousState.received;
-          return previousState;
+          // I made this dummy boolean to force the page to rerender.
+          // It's probably not right but it works so there.
+          that.setState(previousState => {
+            previousState.received === !previousState.received;
+            return previousState;
+          })
+        });
+      } else { // an admin
+        fetch('/getRooms')
+        .then(function(response) {
+          return response.text()
+            .then(function(text) {
+              const rooms = JSON.parse(text);
+              that.setState((previousState) => {
+                previousState.rooms = rooms;  // setting the socket rooms to state
+                return previousState;
+              })
+          });
         })
-      });
+      }
     })
   }
 
@@ -70,7 +90,7 @@ class Chat extends Component {
       this.props.socket.emit('SEND_MESSAGE', {
         author: this.props.username,
         message: this.state.message,
-        admin: false
+        admin: this.props.admin
       });
       this.setState({message: ''});
     }
@@ -85,6 +105,34 @@ class Chat extends Component {
     } else {
       $(".chat-head img").attr("src", "https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png");
     }
+
+    // for admins only
+    this.setState((previousState) => {
+      previousState.join = false;
+      return previousState;
+    })
+  }
+
+  selectUser(e) {
+    // join private room
+    this.setState((previousState) => {
+      previousState.join = true;
+      return previousState;
+    })
+
+    this.props.socket.emit('room', e.target.id);
+
+    // listen for messages
+    this.props.socket.on('RECEIVE_MESSAGE', data => {
+      this.props.addMessage(data);
+
+      // I made this dummy boolean to force the page to rerender.
+      // It's probably not right but it works so there.
+      this.setState(previousState => {
+        previousState.received === !previousState.received;
+        return previousState;
+      })
+    })
   }
 
   render(){
@@ -96,7 +144,17 @@ class Chat extends Component {
       )
     })
 
-    return(
+    let rooms = [];
+    for (let key in this.state.rooms) rooms.push(key);
+
+    rooms = rooms.map((room, i) => {
+      if (room === '101209756539695740689') return (<div></div>);
+      return (
+        <div style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}} key={i + room} id={room} onClick={this.selectUser} className='msg-send'>{`User ${i + 1}`}</div>
+      )
+    })
+
+    return !this.props.admin || this.state.join ? (
       <div style={{'position': 'fixed'}}className="chat-box">
         <div className="chat-head">
           <h2 style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}}>Customer Service Rep</h2>
@@ -113,6 +171,25 @@ class Chat extends Component {
           </div>
           <div className="send">
             <button onClick={this.sendMessage}>SEND</button>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div style={{'position': 'fixed'}}className="chat-box">
+        <div className="chat-head">
+          <h2 style={{fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'}}>Rooms</h2>
+          <img src="https://maxcdn.icons8.com/windows10/PNG/16/Arrows/angle_down-16.png" title="Expand Arrow" width="16" onClick={this.toggleChat}/>
+        </div>
+        <div className="chat-body">
+          <div className="msg-insert">
+            <div className="messages">
+            {rooms}
+            </div>
+          </div>
+          <div className="chat-text">
+          </div>
+          <div className="send">
+            <button>SELECT</button>
           </div>
         </div>
       </div>

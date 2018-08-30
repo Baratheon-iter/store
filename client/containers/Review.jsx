@@ -9,19 +9,11 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 
 const products = [
-  { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-  { name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-  { name: 'Product 3', desc: 'Something else', price: '$6.51' },
-  { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
+  { name: 'Snowpants', desc: 'The toightest snowpants', price: '$18.99' },
+  { name: 'T-Shirt', desc: 'Toighter than your average t-shirt', price: '$15.99' },
+  { name: 'Blouse', desc: 'This blouse is toight', price: '$35.99' },
+  { name: 'Sweater', desc: 'Toight for the cold', price: '$18.99' },
+  { name: 'Shipping', desc: 'Toight in rain or wind', price: '$18.99' },
 ];
 
 const styles = theme => ({
@@ -53,7 +45,7 @@ function Review(props) {
         <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
           <Typography variant="subheading" className={classes.total}>
-            $34.06
+            $217.90
           </Typography>
         </ListItem>
       </List>
