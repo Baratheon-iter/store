@@ -13,7 +13,7 @@ const products = [
   { name: 'T-Shirt', desc: 'Toighter than your average t-shirt', price: '$15.99' },
   { name: 'Blouse', desc: 'This blouse is toight', price: '$35.99' },
   { name: 'Sweater', desc: 'Toight for the cold', price: '$18.99' },
-  { name: 'Shipping', desc: 'Toight in rain or wind', price: '18.99' },
+  { name: 'Shipping', desc: 'Toight in rain or wind', price: '$18.99' },
 ];
 
 const styles = theme => ({
