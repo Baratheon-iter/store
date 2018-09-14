@@ -1,7 +1,5 @@
-Master
-[![Build Status](https://travis-ci.org/Baratheon-iter/store.svg?branch=master)](https://travis-ci.org/Baratheon-iter/store) 
-Staging
-[![Build Status](https://travis-ci.org/Baratheon-iter/store.svg?branch=staging)](https://travis-ci.org/Baratheon-iter/store)
+[![Build Status](https://img.shields.io/travis/Baratheon-iter/store.svg?branch=master&label=master)](https://travis-ci.org/Baratheon-iter/store) 
+[![Build Status](https://img.shields.io/travis/Baratheon-iter/store.svg?branch=staging&label=staging)](https://travis-ci.org/Baratheon-iter/store)
 # store
 Store where you can buy things
 
